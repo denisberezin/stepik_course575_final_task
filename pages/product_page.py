@@ -7,8 +7,6 @@ class ProductPage(BasePage):
         add_button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET_BUTTON)
         add_button.click()
 
-    #def check_total_basket_cost(self):
-
     def get_product_cost(self):
         return self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
 
