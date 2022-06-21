@@ -22,10 +22,8 @@ def test_guest_can_add_product_to_basket(browser, link):
     product_cost = page.get_product_cost()
     page.add_product_to_the_basket()
     page.solve_quiz_and_get_code()
-    added_product_name = page.get_added_product_name()
-    assert added_product_name == product_name, f'Expected product name is "{product_name}" but "{added_product_name}" was added.'
-    total_basket_cost = page.get_total_basket_cost()
-    assert total_basket_cost == product_cost, f'Expected basket cost = {product_cost} but {total_basket_cost} was shown.'
+    page.should_be_correct_product_name(product_name)
+    page.should_be_correct_total_basket_cost(product_cost)
 
 @pytest.mark.xfail
 def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
@@ -103,8 +101,6 @@ class TestUserAddToBasketFromProductPage:
         product_cost = page.get_product_cost()
         page.add_product_to_the_basket()
         page.solve_quiz_and_get_code()
-        added_product_name = page.get_added_product_name()
-        assert added_product_name == product_name, f'Expected product name is "{product_name}" but "{added_product_name}" was added.'
-        total_basket_cost = page.get_total_basket_cost()
-        assert total_basket_cost == product_cost, f'Expected basket cost = {product_cost} but {total_basket_cost} was shown.'
+        page.should_be_correct_product_name(product_name)
+        page.should_be_correct_total_basket_cost(product_cost)
 
