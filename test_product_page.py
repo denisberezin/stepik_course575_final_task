@@ -82,3 +82,36 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page.should_message_empty_basket_shown()
     #login_page.should_be_login_page()
 
+class TestUserAddToBasketFromProductPage:
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        email = str(time.time()) + "@fakemail.org"
+        password = "Test$$67Stepik"
+        link = "http://selenium1py.pythonanywhere.com/en-gb/accounts/login/"
+        login_page = LoginPage(browser, link)
+        login_page.open()
+        login_page.should_be_login_page()
+        login_page.register_new_user(email, password)
+        login_page.should_be_authorized_user()
+                
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+        #link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
+        
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+        #link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
+        page = ProductPage(browser, link)
+        page.open()
+        product_name = page.get_product_name()
+        product_cost = page.get_product_cost()
+        page.add_product_to_the_basket()
+        page.solve_quiz_and_get_code()
+        added_product_name = page.get_added_product_name()
+        assert added_product_name == product_name, f'Expected product name is "{product_name}" but "{added_product_name}" was added.'
+        total_basket_cost = page.get_total_basket_cost()
+        assert total_basket_cost == product_cost, f'Expected basket cost = {product_cost} but {total_basket_cost} was shown.'
+
